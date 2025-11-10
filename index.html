@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Love Letter</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ffe4e1, #faf0e6);
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0icGFwZXIiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0ibm9uZSIvPjxsaW5lIHgxPSIwIiB5MT0iMCIgeDI9IjEwMCIgeTI9IjEwMCIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjAuNSIvPjxsaW5lIHgxPSIxMDAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEwMCIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjAuNSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXBlcikifS8+c3ZnPg==');
+            color: #d2691e;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .page {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .page.active {
+            display: block;
+            opacity: 1;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ff69b4;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        button {
+            background: linear-gradient(135deg, #ffe4e1, #faf0e6);
+            border: 2px solid #d2691e;
+            color: #d2691e;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .envelope {
+            width: 200px;
+            height: 150px;
+            background: #faf0e6;
+            border: 2px solid #d2691e;
+            position: relative;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: transform 0.5s;
+        }
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: #ffe4e1;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transition: transform 0.5s;
+        }
+        .envelope.open::before {
+            transform: rotateX(180deg);
+        }
+        .letter {
+            font-size: 1.5em;
+            white-space: pre-line;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .corkboard {
+            background: #8b4513;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .photo {
+            width: 150px;
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            margin: 10px;
+            border: 2px solid #d2691e;
+            position: relative;
+            border-radius: 5px;
+        }
+        .photo::after {
+            content: '💖';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 1.5em;
+            animation: heartBeat 1s infinite;
+        }
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        .interactive-heart {
+            font-size: 3em;
+            color: #ff69b4;
+            cursor: pointer;
+            margin: 10px;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+        .interactive-heart:hover {
+            transform: scale(1.2);
+        }
+        .confetti {
+            position: absolute;
+            font-size: 2em;
+            color: #ff69b4;
+            animation: confettiFall 3s ease-out forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+        .cake {
+            width: 200px;
+            height: 150px;
+            background: #ffe4e1;
+            border-radius: 50% 50% 0 0;
+            position: relative;
+            margin: 0 auto;
+            border: 2px solid #d2691e;
+        }
+        .cake::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 40px;
+            background: #ff69b4;
+            border-radius: 10px;
+            animation: flicker 1s infinite alternate;
+        }
+        .cake::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 30%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 40px;
+            background: #ff69b4;
+            border-radius: 10px;
+            animation: flicker 1s infinite alternate-reverse;
+        }
+        @keyframes flicker {
+            0% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        .birthday-message {
+            font-size: 1.5em;
+            white-space: pre-line;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 2em; }
+            .envelope { width: 150px; height: 120px; }
+            .photo { width: 120px; height: 120px; }
+            .cake { width: 150px; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+    <audio src="romantic-tune.mp3" id="bgMusic" loop>
+    <button>tap here</button>    
+    </audio>
+    
+
+    <div id="page1" class="page active">
+        <h1>An Envelope for My Love 💌</h1>
+        <div class="envelope" onclick="openEnvelope()"></div>
+    </div>
+    <div id="page2" class="page">
+        <h1>My Love Letter</h1>
+        <div id="letter" class="letter"></div>
+        <button onclick="nextPage(3)">Next</button>
+    </div>
+    <div id="page3" class="page">
+        <h1>Memories in Pictures</h1>
+        <div class="corkboard">
+            <div class="photo" style="background-image: url('photo5.jpg')" ></div>
+            <div class="photo" style="background-image: url('photo2.jpg');"></div>
+            <div class="photo" style="background-image: url('photo3.jpg');"></div>
+            <div class="photo" style="background-image: url('photo4.jpg');"></div>
+        </div>
+        <button onclick="nextPage(4)">Next</button>
+    </div>
+    <div id="page4" class="page">
+        <h1>You + Me = Forever</h1>
+        <div>
+            <span class="interactive-heart" onclick="popConfetti(this)">💖</span>
+            <span class="interactive-heart" onclick="popConfetti(this)">💖</span>
+            <span class="interactive-heart" onclick="popConfetti(this)">💖</span>
+        </div>
+        <p id="finalMessage" style="font-size: 1.5em; margin-top: 20px;"></p>
+        <button onclick="nextPage(5)">Next</button>
+    </div>
+    <div id="page5" class="page">
+        <h1>Happy Birthday, Meri Jaan! 🎂</h1>
+        <div class="cake"></div>
+        <div id="birthdayMessage" class="birthday-message"></div>
+        
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const bgMusic = document.getElementById('bgMusic');
+        bgMusic.play(); // Start background music
+
+        const loveLetter = `My dearest love,\n\nFrom the moment I met you, my world changed.\nYour smile lights up my darkest days,\nAnd your touch sets my heart ablaze.\n\nI cherish every memory we share,\nAnd dream of the future we'll build together.\nYou are my everything, my forever.\n\nWith all my love,\nYour devoted partner 💖`;
+
+        const birthdayMessage = `Happy Birthday to the love of my life!\n\nMay this year bring you joy, laughter, and endless happiness.\nYou make every day special, and I can't wait to celebrate many more with you.\n\nI love you more than words can say! 🎉💕`;
+
+        function nextPage(page) {
+            document.getElementById(`page${currentPage}`).classList.remove('active');
+            currentPage = page;
+            document.getElementById(`page${currentPage}`).classList.add('active');
+            if (page === 2) startTyping();
+            if (page === 4) showFinalMessage();
+            if (page === 5) startBirthdayTyping();
+        }
+
+        function openEnvelope() {
+            const envelope = document.querySelector('.envelope');
+            envelope.classList.add('open');
+            setTimeout(() => nextPage(2), 1000);
+        }
+
+        function startTyping() {
+            const letterDiv = document.getElementById('letter');
+            let i = 0;
+            letterDiv.textContent = '';
+            const interval = setInterval(() => {
+                letterDiv.textContent += loveLetter[i];
+                i++;
+                if (i >= loveLetter.length) clearInterval(interval);
+            }, 50);
+        }
+
+        function popConfetti(heart) {
+            for (let i = 0; i < 10; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.textContent = '💖';
+                confetti.style.left = (heart.offsetLeft + Math.random() * 50) + 'px';
+                confetti.style.top = (heart.offsetTop + Math.random() * 50) + 'px';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        function showFinalMessage() {
+            const message = document.getElementById('finalMessage');
+            message.textContent = 'Together, we are unstoppable. I love you endlessly! 💕';
+        }
+
+        function startBirthdayTyping() {
+            const messageDiv = document.getElementById('birthdayMessage');
+            let i = 0;
+            messageDiv.textContent = '';
+            const interval = setInterval(() => {
+                messageDiv.textContent += birthdayMessage[i];
+                i++;
+                if (i >= birthdayMessage.length) clearInterval(interval);
+            }, 50);
+        }
+    </script>
+</body>
+</html>
